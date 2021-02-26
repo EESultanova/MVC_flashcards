@@ -28,33 +28,49 @@ let result = [
   },
 ];
 
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 let counter = 0;
-let counter1 = 0;
-let counter3 = 0;
+function getAnswer(result, i=0) {
+  const q = result[i].question;
+  const a = result[i].answer;
 
 
-function getAnswer(arg) {
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    const q = arg.question;
-    const a = arg.answer;
+  rl.question(q, (enteredA) => {
 
-    rl.question(q, (enteredA) => {
-      
-      console.log(`answer ==> ${enteredA} result=${a === enteredA}`);
+    if(i === result.length-1) {
 
+      if(a === enteredA) {
+        console.log(`Your answer is correct`);
+        counter +=1
+      } else {
+        console.log(`Your answer is wrong`);
+      }
+    
+      console.log('over', `${counter}`);
       rl.close();
-      resolve(enteredA);
-    });
-  });
-}
-getAnswer(result[0])
-  .then(() => getAnswer(result[1]))
-  .then(() => getAnswer(result[2]))
-  .then(() => getAnswer(result[3]))
-  .then(() => getAnswer(result[4]));
+      
 
+    } else {
+
+      if (a === enteredA) {
+        console.log(`Your answer is correct`);
+        counter++;
+      } else {
+        console.log(`Your answer is wrong`);
+      }
+
+      
+      getAnswer(result, i= i+1)
+    }
+    
+  });
+
+
+
+}
+
+getAnswer(result, 0);
